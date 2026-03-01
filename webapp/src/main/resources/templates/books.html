@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Доступные книги</title>
+</head>
+<body>
+<h1>Доступные книги</h1>
+<ul>
+    <!-- Проверка, есть ли книги -->
+    <li th:if="${#lists.isEmpty(booksList)}">Нет доступных книг.</li>
+    <!-- Итерация по книгам -->
+    <li th:each="book : ${booksList}">
+        <strong th:text="${book.title}">Название книги</strong> -
+        <span th:text="${book.author.name}">Автор</span> -
+        <em th:text="${book.status}">Статус</em>
+    </li>
+</ul>
+</body>
+</html>
