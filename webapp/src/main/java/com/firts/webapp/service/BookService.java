@@ -8,10 +8,7 @@ import com.firts.webapp.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BookService {
@@ -24,6 +21,14 @@ public class BookService {
         this.authorService = authorService;
     }
 
+    public Book getBookById(Long id){
+        Optional<Book> book = bookRepository.findById(id);
+        if(book.isPresent()){
+            return book.get();
+        }
+        throw new NoSuchElementException("no such book");
+    }
+
     //  обработка ситуации с null с репозитория с помощью Optional
     //  может возвращать пустой иммутабельный список
     public List<Book> getBooksByStatus(BookStatus status) {
@@ -31,6 +36,16 @@ public class BookService {
                 .orElseGet(Collections::emptyList);
     }
 
+    public void changeBookStatus(Book book, BookStatus newStatus){
+        book.setStatus(newStatus);
+        bookRepository.save(book);
+        System.out.println("changed" + book.getTitle() + "status to " + book.getStatus());
+    }
+
+    /*
+     * добавляет книгу в том случае если такое имя еще не занято, в ином
+     * случае лог
+     */
     public Book addBook(String title, String authorName){
         Author author = authorService.getOrCreateByName(authorName);
         if(bookRepository.existsByTitle(title)){

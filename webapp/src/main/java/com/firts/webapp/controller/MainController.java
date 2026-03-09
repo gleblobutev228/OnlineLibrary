@@ -7,6 +7,7 @@ import com.firts.webapp.service.BookService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,12 @@ public class MainController {
     public String showAvailableBooksList(Model model){
         model.addAttribute("booksList", bookService.getBooksByStatus(BookStatus.AVAILABLE));
         return "books";
+    }
+
+    @GetMapping("/books/{id}")
+    public String showBookDetails(@RequestParam("id")Long id, Model model){
+        model.addAttribute("book", bookService.getBookById(id));
+        return "bookDetails";
     }
 
     @GetMapping("/books/add")
